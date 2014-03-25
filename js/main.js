@@ -1,6 +1,6 @@
 (function() {
   $(function() {
-    return $(".content").vSlider();
+    return $(".content").hSlider();
   });
 
 }).call(this);

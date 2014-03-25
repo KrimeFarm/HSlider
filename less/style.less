@@ -37,23 +37,72 @@
   }
 }
 
-// .content {
-//   border: 1px solid red;
-//   margin: 0 auto;
-//   background: red;
-//   min-height: 200px;
+.content {
+  margin: 0 auto;
+  min-height: 200px;
+
+  .container {
+    position: relative;
+    height: 200px;
+    overflow: hidden;
+    border: 1px solid blue;
+
+    .next,.before {
+      position: absolute;
+      right: 0;
+      top: 0;
+      height: 200px;
+      width: 30px;
+      background-color: blue;
+    }
+
+    .before {
+      left: 0;
+      background-color: yellow;
+    }
+
+  }
+}
+
+
+
 //
-//   .container {
-//     height: 200px;
-//     clear: right;
-//     overflow: hidden;
+// DOTTED THINGS
+// that everyone place on a slide
+// =G============================
+
+.content .signature {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  text-align: center;
+  li {
+    display: inline-block;
+    background: magenta;
+    height: 10px;
+    width: 10px;
+    border-radius: 10px;
+    margin: 0 10px;
+  }
+}
+
+
+
 //
-//     @media (min-width: @screen-sm) {
-//       float: left;
-//       width: 100% / 3; //100% divided for the number of slide blocks
-//     }
-//   }
-// }
-//
-//
-//
+// SLIDE CONTENT
+// =G==========
+
+.slide {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  li {
+    float: left;
+    height: 200px;
+    background-color: red;
+  }
+  p {
+    text-align: center;
+    font-size: 30px;
+  }
+}

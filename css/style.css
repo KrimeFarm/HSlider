@@ -14,27 +14,51 @@
   }
 }
 .content {
-  border: 1px solid red;
   margin: 0 auto;
-  background: red;
   min-height: 200px;
 }
 .content .container {
+  position: relative;
   height: 200px;
-  clear: right;
   overflow: hidden;
+  border: 1px solid blue;
 }
-@media (min-width: 768px) {
-  .content .container {
-    float: left;
-    width: 33.33333333%;
-  }
+.content .container .next,
+.content .container .before {
+  position: absolute;
+  right: 0;
+  top: 0;
+  height: 200px;
+  width: 30px;
+  background-color: blue;
+}
+.content .container .before {
+  left: 0;
+  background-color: yellow;
+}
+.content .signature {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  text-align: center;
+}
+.content .signature li {
+  display: inline-block;
+  background: magenta;
+  height: 10px;
+  width: 10px;
+  border-radius: 10px;
+  margin: 0 10px;
 }
 .slide {
-  width: 100%;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.slide li {
   float: left;
-  clear: right;
-  height: inherit;
+  height: 200px;
+  background-color: red;
 }
 .slide p {
   text-align: center;
