@@ -68,6 +68,7 @@ $.fn.extend
         slideIndex++
 
       moveForward = (index) ->
+        log index
         if index < slidesNumber
           $slideUl.css "margin-left", - (index * frameWidth)
         else
@@ -76,11 +77,26 @@ $.fn.extend
           setTimeout ->
             transitionOff()
             $slideUl.css "margin-left", 0
-            $("li:last", $slideUl).remove()
+            $("li:last-child", $slideUl).remove()
           , settings.slide_timing * 1000
 
       moveBackward = (index) ->
-        $slideUl.css "margin-left", (index * frameWidth)
+        log index
+        if index >= 0
+          $slideUl.css "margin-left", - (index * frameWidth)
+        else
+          $("li:last-child", $slideUl).clone().insertBefore($("li:first-child", $slideUl))
+          transitionOff()
+          $slideUl.css "margin-left", - frameWidth
+          setTimeout ->
+            transitionOn()
+            $slideUl.css "margin-left", 0
+            setTimeout ->
+              transitionOff()
+              $slideUl.css "margin-left", - ( (slidesNumber - 1) * frameWidth )
+              $("li:first-child", $slideUl).remove()
+            , settings.slide_timing * 1000
+          , 10
 
       forwardIndex = 0
 
@@ -94,8 +110,12 @@ $.fn.extend
 
       $(".before").on "click", ->
         transitionOn()
-        forwardIndex--
-        moveBackward(forwardIndex)
+        if forwardIndex >= 0
+          forwardIndex--
+          moveBackward(forwardIndex)
+        else
+          forwardIndex = slidesNumber - 2
+          moveBackward(forwardIndex)
 
       if jQuery.browser.mobile
         $slides.swipe

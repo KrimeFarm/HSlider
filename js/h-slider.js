@@ -59,6 +59,7 @@
           slideIndex++;
         }
         moveForward = function(index) {
+          log(index);
           if (index < slidesNumber) {
             return $slideUl.css("margin-left", -(index * frameWidth));
           } else {
@@ -67,12 +68,28 @@
             return setTimeout(function() {
               transitionOff();
               $slideUl.css("margin-left", 0);
-              return $("li:last", $slideUl).remove();
+              return $("li:last-child", $slideUl).remove();
             }, settings.slide_timing * 1000);
           }
         };
         moveBackward = function(index) {
-          return $slideUl.css("margin-left", index * frameWidth);
+          log(index);
+          if (index >= 0) {
+            return $slideUl.css("margin-left", -(index * frameWidth));
+          } else {
+            $("li:last-child", $slideUl).clone().insertBefore($("li:first-child", $slideUl));
+            transitionOff();
+            $slideUl.css("margin-left", -frameWidth);
+            return setTimeout(function() {
+              transitionOn();
+              $slideUl.css("margin-left", 0);
+              return setTimeout(function() {
+                transitionOff();
+                $slideUl.css("margin-left", -((slidesNumber - 1) * frameWidth));
+                return $("li:first-child", $slideUl).remove();
+              }, settings.slide_timing * 1000);
+            }, 10);
+          }
         };
         forwardIndex = 0;
         $(".next").on("click", function() {
@@ -86,8 +103,13 @@
         });
         $(".before").on("click", function() {
           transitionOn();
-          forwardIndex--;
-          return moveBackward(forwardIndex);
+          if (forwardIndex >= 0) {
+            forwardIndex--;
+            return moveBackward(forwardIndex);
+          } else {
+            forwardIndex = slidesNumber - 2;
+            return moveBackward(forwardIndex);
+          }
         });
         if (jQuery.browser.mobile) {
           return $slides.swipe({
