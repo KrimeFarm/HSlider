@@ -1,0 +1,42 @@
+@media (min-width: 768px) {
+  .content {
+    width: 720px;
+  }
+}
+@media (min-width: 992px) {
+  .content {
+    width: 940px;
+  }
+}
+@media (min-width: 1200px) {
+  .content {
+    width: 1140px;
+  }
+}
+.content {
+  border: 1px solid red;
+  margin: 0 auto;
+  background: red;
+  min-height: 200px;
+}
+.content .container {
+  height: 200px;
+  clear: right;
+  overflow: hidden;
+}
+@media (min-width: 768px) {
+  .content .container {
+    float: left;
+    width: 33.33333333%;
+  }
+}
+.slide {
+  width: 100%;
+  float: left;
+  clear: right;
+  height: inherit;
+}
+.slide p {
+  text-align: center;
+  font-size: 30px;
+}
