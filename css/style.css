@@ -50,6 +50,9 @@
   border-radius: 10px;
   margin: 0 10px;
 }
+.content .signature li.lightsOn {
+  background: blue;
+}
 .slide {
   list-style: none;
   padding: 0;

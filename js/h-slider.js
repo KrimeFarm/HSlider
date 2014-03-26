@@ -9,6 +9,7 @@
       settings = {
         debug: true,
         slide_timing: 1,
+        loop_timing: 5000,
         slide_effect: "cubic-bezier(1,.34,.83,.9)"
       };
       settings = $.extend(settings, options);
@@ -18,11 +19,12 @@
         }
       };
       return this.each(function() {
-        var $container, $signature, $slideUl, $slides, $this, forwardIndex, frameWidth, moveBackward, moveForward, slideIndex, slidesNumber, totalFrameWidth, transitionOff, transitionOn;
+        var $container, $interactions, $signature, $slideUl, $slides, $this, checkTheAction, forwardIndex, frameWidth, moveBackward, moveForward, preventTheAction, slideIndex, slidesNumber, theAutoLoop, theDottedConnection, totalFrameWidth, transitionOff, transitionOn;
         $this = $(this);
         $container = $(".container", $this);
         $slideUl = $('.slide', $this);
         $slides = $(".slide li", $this);
+        $interactions = $(".next, .before", $this);
         $signature = $("ul.signature", $this);
         transitionOn = function() {
           $slideUl.css({
@@ -55,12 +57,38 @@
         });
         slideIndex = 0;
         while (slideIndex < slidesNumber) {
-          $signature.append("<li></li>");
+          if (slideIndex === 0) {
+            $signature.append("<li class=\"signature-" + slideIndex + " lightsOn\"></li>");
+          } else {
+            $signature.append("<li class=\"signature-" + slideIndex + "\"></li>");
+          }
           slideIndex++;
         }
+        theDottedConnection = function(elem) {
+          log("this is the slide number " + elem);
+          $("li", $signature).removeClass("lightsOn");
+          if (elem === slidesNumber) {
+            $("li.signature-0", $this).addClass("lightsOn");
+            return log("this is max");
+          } else if (elem < 0) {
+            log("this is min");
+            return $("li.signature-" + (slidesNumber - 1), $this).addClass("lightsOn");
+          } else {
+            return $("li.signature-" + elem, $this).addClass("lightsOn");
+          }
+        };
+        checkTheAction = function() {
+          log("prevent");
+          $interactions.addClass("active");
+          return setTimeout(function() {
+            return $interactions.removeClass("active");
+          }, settings.slide_timing * 1000);
+        };
         forwardIndex = 0;
         moveForward = function() {
+          checkTheAction();
           forwardIndex++;
+          theDottedConnection(forwardIndex);
           log(forwardIndex);
           if (forwardIndex < slidesNumber) {
             transitionOn();
@@ -77,7 +105,9 @@
           }
         };
         moveBackward = function() {
+          checkTheAction();
           forwardIndex--;
+          theDottedConnection(forwardIndex);
           log(forwardIndex);
           if (forwardIndex >= 0) {
             transitionOn();
@@ -98,22 +128,52 @@
             }, 10);
           }
         };
+        preventTheAction = function() {
+          if ($interactions.hasClass("active")) {
+            return false;
+          } else {
+            return true;
+          }
+        };
         $(".next").on("click", function() {
-          return moveForward();
+          if (preventTheAction()) {
+            return moveForward();
+          }
         });
         $(".before").on("click", function() {
-          return moveBackward();
+          if (preventTheAction()) {
+            return moveBackward();
+          }
         });
         if (jQuery.browser.mobile) {
-          return $slides.swipe({
+          $slides.swipe({
             swipeRight: function() {
-              return moveForward();
+              if (preventTheAction()) {
+                return moveForward();
+              }
             },
             swipeLeft: function() {
-              return moveBackward();
+              if (preventTheAction()) {
+                return moveBackward();
+              }
             }
           });
         }
+        theAutoLoop = setInterval(function() {
+          moveForward();
+        }, settings.loop_timing);
+        return $(document).on({
+          mouseenter: function() {
+            log("quit");
+            return clearInterval(theAutoLoop);
+          },
+          mouseleave: function() {
+            log("out");
+            return theAutoLoop = setInterval(function() {
+              moveForward();
+            }, settings.loop_timing);
+          }
+        }, ".container", $this);
       });
     }
   });
