@@ -6,7 +6,7 @@ An horizontal slider, responsive compatible with Bootstrap, requires [TouchSwipe
 ## Instructions
 
 
-### Html side.
+### Html side
 
 ```html
 <div class="content">
@@ -26,7 +26,7 @@ An horizontal slider, responsive compatible with Bootstrap, requires [TouchSwipe
 </div>
 ```
 
-### Less side.
+### Less side
 
 ```scss
 .content .signature {
