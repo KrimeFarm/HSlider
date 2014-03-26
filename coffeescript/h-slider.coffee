@@ -71,6 +71,8 @@ $.fn.extend
         totalFrameWidth = frameWidth * slidesNumber
         $slideUl.css "width", totalFrameWidth
         $slides.css "width", frameWidth
+        $slideUl.css "margin-left", - (forwardIndex * frameWidth)
+        transitionOff()
 
 
       # control class for dotted things

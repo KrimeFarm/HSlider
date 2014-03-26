@@ -53,7 +53,9 @@
           frameWidth = $container.innerWidth();
           totalFrameWidth = frameWidth * slidesNumber;
           $slideUl.css("width", totalFrameWidth);
-          return $slides.css("width", frameWidth);
+          $slides.css("width", frameWidth);
+          $slideUl.css("margin-left", -(forwardIndex * frameWidth));
+          return transitionOff();
         });
         slideIndex = 0;
         while (slideIndex < slidesNumber) {
