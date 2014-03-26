@@ -67,24 +67,33 @@ $.fn.extend
         $signature.append("<li></li>")
         slideIndex++
 
-      moveForward = (index) ->
-        log index
-        if index < slidesNumber
-          $slideUl.css "margin-left", - (index * frameWidth)
+
+
+      forwardIndex = 0
+      moveForward = () ->
+        forwardIndex++
+        log forwardIndex
+        if forwardIndex < slidesNumber
+          transitionOn()
+          $slideUl.css "margin-left", - (forwardIndex * frameWidth)
         else
           $("li:first-child", $slideUl).clone().insertAfter($("li:last", $slideUl))
-          $slideUl.css "margin-left", - (index * frameWidth)
+          $slideUl.css "margin-left", - (forwardIndex * frameWidth)
           setTimeout ->
             transitionOff()
             $slideUl.css "margin-left", 0
             $("li:last-child", $slideUl).remove()
           , settings.slide_timing * 1000
+          forwardIndex = 0
 
-      moveBackward = (index) ->
-        log index
-        if index >= 0
-          $slideUl.css "margin-left", - (index * frameWidth)
+      moveBackward = () ->
+        forwardIndex--
+        log forwardIndex
+        if  forwardIndex >= 0
+          transitionOn()
+          $slideUl.css "margin-left", - (forwardIndex * frameWidth)
         else
+          forwardIndex = slidesNumber - 1
           $("li:last-child", $slideUl).clone().insertBefore($("li:first-child", $slideUl))
           transitionOff()
           $slideUl.css "margin-left", - frameWidth
@@ -98,33 +107,20 @@ $.fn.extend
             , settings.slide_timing * 1000
           , 10
 
-      forwardIndex = 0
+
 
       $(".next").on "click", ->
-        transitionOn()
-        if forwardIndex < slidesNumber
-          forwardIndex++
-        else
-          forwardIndex = 1
-        moveForward(forwardIndex)
+        moveForward()
 
       $(".before").on "click", ->
-        transitionOn()
-        if forwardIndex >= 0
-          forwardIndex--
-          moveBackward(forwardIndex)
-        else
-          forwardIndex = slidesNumber - 2
-          moveBackward(forwardIndex)
+        moveBackward()
+
+
 
       if jQuery.browser.mobile
         $slides.swipe
           swipeRight: ->
-            transitionOn()
-            forwardIndex++
-            moveForward(forwardIndex)
+            moveForward()
           swipeLeft: ->
-            transitionOn()
-            forwardIndex--
-            moveBackward(forwardIndex)
+            moveBackward()
 

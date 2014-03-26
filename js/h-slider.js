@@ -58,25 +58,32 @@
           $signature.append("<li></li>");
           slideIndex++;
         }
-        moveForward = function(index) {
-          log(index);
-          if (index < slidesNumber) {
-            return $slideUl.css("margin-left", -(index * frameWidth));
+        forwardIndex = 0;
+        moveForward = function() {
+          forwardIndex++;
+          log(forwardIndex);
+          if (forwardIndex < slidesNumber) {
+            transitionOn();
+            return $slideUl.css("margin-left", -(forwardIndex * frameWidth));
           } else {
             $("li:first-child", $slideUl).clone().insertAfter($("li:last", $slideUl));
-            $slideUl.css("margin-left", -(index * frameWidth));
-            return setTimeout(function() {
+            $slideUl.css("margin-left", -(forwardIndex * frameWidth));
+            setTimeout(function() {
               transitionOff();
               $slideUl.css("margin-left", 0);
               return $("li:last-child", $slideUl).remove();
             }, settings.slide_timing * 1000);
+            return forwardIndex = 0;
           }
         };
-        moveBackward = function(index) {
-          log(index);
-          if (index >= 0) {
-            return $slideUl.css("margin-left", -(index * frameWidth));
+        moveBackward = function() {
+          forwardIndex--;
+          log(forwardIndex);
+          if (forwardIndex >= 0) {
+            transitionOn();
+            return $slideUl.css("margin-left", -(forwardIndex * frameWidth));
           } else {
+            forwardIndex = slidesNumber - 1;
             $("li:last-child", $slideUl).clone().insertBefore($("li:first-child", $slideUl));
             transitionOff();
             $slideUl.css("margin-left", -frameWidth);
@@ -91,37 +98,19 @@
             }, 10);
           }
         };
-        forwardIndex = 0;
         $(".next").on("click", function() {
-          transitionOn();
-          if (forwardIndex < slidesNumber) {
-            forwardIndex++;
-          } else {
-            forwardIndex = 1;
-          }
-          return moveForward(forwardIndex);
+          return moveForward();
         });
         $(".before").on("click", function() {
-          transitionOn();
-          if (forwardIndex >= 0) {
-            forwardIndex--;
-            return moveBackward(forwardIndex);
-          } else {
-            forwardIndex = slidesNumber - 2;
-            return moveBackward(forwardIndex);
-          }
+          return moveBackward();
         });
         if (jQuery.browser.mobile) {
           return $slides.swipe({
             swipeRight: function() {
-              transitionOn();
-              forwardIndex++;
-              return moveForward(forwardIndex);
+              return moveForward();
             },
             swipeLeft: function() {
-              transitionOn();
-              forwardIndex--;
-              return moveBackward(forwardIndex);
+              return moveBackward();
             }
           });
         }
