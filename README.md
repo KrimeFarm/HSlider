@@ -1,10 +1,9 @@
 HSlider
 =================
 
-An horizontal slider, responsive compatible with Bootstrap, requires [TouchSwipe](http://labs.rampinteractive.co.uk/touchSwipe/demos/) and the provided [jQuery.browser.mobile](http://detectmobilebrowser.com/).
+An horizontal slider, responsive and compatible with Bootstrap, requires [TouchSwipe](http://labs.rampinteractive.co.uk/touchSwipe/demos/) and the provided [jQuery.browser.mobile](http://detectmobilebrowser.com/).
 
 ## Instructions
-
 
 ### Html side
 
