@@ -68,7 +68,7 @@ $.fn.extend
       # the responsive interactions
       $(window).resize ->
         frameWidth = $container.innerWidth()
-        totalFrameWidth = frameWidth * slidesNumber
+        totalFrameWidth = frameWidth * ( slidesNumber + 1 )
         $slideUl.css "width", totalFrameWidth
         $slides.css "width", frameWidth
         $slideUl.css "margin-left", - (forwardIndex * frameWidth)
