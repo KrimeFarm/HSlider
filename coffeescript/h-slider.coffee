@@ -180,11 +180,11 @@ $.fn.extend
       # the click interactions
       # forward and backward
       $(".next").on "click", ->
-        if preventTheAction()
+        if preventTheAction() and !jQuery.browser.mobile
           moveForward()
 
       $(".before").on "click", ->
-        if preventTheAction()
+        if preventTheAction() and !jQuery.browser.mobile
           moveBackward()
 
 
@@ -193,10 +193,10 @@ $.fn.extend
       # only when mobile
       if jQuery.browser.mobile
         $slides.swipe
-          swipeRight: ->
+          swipeLeft: ->
             if preventTheAction()
               moveForward()
-          swipeLeft: ->
+          swipeRight: ->
             if preventTheAction()
               moveBackward()
 
@@ -205,8 +205,9 @@ $.fn.extend
       # auto loop start, to run
       # the animation automatically
       theAutoLoop = setInterval ->
-        moveForward()
-        return
+        if preventTheAction()
+          moveForward()
+          return
       , settings.loop_timing
 
 
@@ -219,7 +220,8 @@ $.fn.extend
         mouseleave: ->
           log "out"
           theAutoLoop = setInterval ->
-            moveForward()
-            return
+            if preventTheAction()
+              moveForward()
+              return
           , settings.loop_timing
       , ".container", $this
