@@ -124,12 +124,12 @@ $.fn.extend
 
       # the complete forward animation
       moveForward = () ->
+        transitionOn()
         checkTheAction()
         forwardIndex++
         theDottedConnection(forwardIndex)
         log forwardIndex
         if forwardIndex < slidesNumber
-          transitionOn()
           $slideUl.css "margin-left", - (forwardIndex * frameWidth)
         else
           $("li:first-child", $slideUl).clone().insertAfter($("li:last", $slideUl))
@@ -143,12 +143,12 @@ $.fn.extend
 
       # the backward animation
       moveBackward = () ->
+        transitionOn()
         checkTheAction()
         forwardIndex--
         theDottedConnection(forwardIndex)
         log forwardIndex
         if  forwardIndex >= 0
-          transitionOn()
           $slideUl.css "margin-left", - (forwardIndex * frameWidth)
         else
           forwardIndex = slidesNumber - 1
@@ -180,26 +180,23 @@ $.fn.extend
       # the click interactions
       # forward and backward
       $(".next").on "click", ->
-        if preventTheAction() and !jQuery.browser.mobile
+        if preventTheAction()
           moveForward()
 
       $(".before").on "click", ->
-        if preventTheAction() and !jQuery.browser.mobile
+        if preventTheAction()
           moveBackward()
 
 
 
       # the slide interaction
-      # only when mobile
-      if jQuery.browser.mobile
-        $slides.swipe
-          swipeLeft: ->
-            if preventTheAction()
-              moveForward()
-          swipeRight: ->
-            if preventTheAction()
-              moveBackward()
-
+      $slides
+        .on "swipeleft", ->
+          if preventTheAction()
+            moveForward()
+        .on "swiperight", ->
+          if preventTheAction()
+            moveBackward()
 
 
       # auto loop start, to run

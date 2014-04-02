@@ -1,11 +1,17 @@
 HSlider
 =================
 
-An horizontal slider, responsive and compatible with Bootstrap, animations with  CSS3 transitions, requires [TouchSwipe](http://labs.rampinteractive.co.uk/touchSwipe/demos/) and the provided [jQuery.browser.mobile](http://detectmobilebrowser.com/).
+An horizontal slider, responsive and compatible with Bootstrap, animations with CSS3 transitions,
 
-## Instructions
+### Requires:
+- [jquery.event.move](http://stephband.info/jquery.event.move/)
+- [jquery.event.swipe](http://stephband.info/jquery.event.swipe/)
 
-### Html side
+### They can be installed with [Bower](http://bower.io/)
+`bower install jquery.event.move`
+`bower install jquery.event.swipe`
+
+## Html side
 
 ```html
 <div class="content">
@@ -25,7 +31,7 @@ An horizontal slider, responsive and compatible with Bootstrap, animations with 
 </div>
 ```
 
-### Less side
+## Less side
 
 ```scss
 .content .signature {
@@ -63,7 +69,7 @@ An horizontal slider, responsive and compatible with Bootstrap, animations with 
 }
 ```
 
-### Coffeescript side
+## Coffeescript side
 
 ```coffeescript
 $ ->

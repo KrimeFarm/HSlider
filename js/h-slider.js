@@ -51,7 +51,7 @@
         $slides.css("width", frameWidth);
         $(window).resize(function() {
           frameWidth = $container.innerWidth();
-          totalFrameWidth = frameWidth * slidesNumber;
+          totalFrameWidth = frameWidth * (slidesNumber + 1);
           $slideUl.css("width", totalFrameWidth);
           $slides.css("width", frameWidth);
           $slideUl.css("margin-left", -(forwardIndex * frameWidth));
@@ -88,12 +88,12 @@
         };
         forwardIndex = 0;
         moveForward = function() {
+          transitionOn();
           checkTheAction();
           forwardIndex++;
           theDottedConnection(forwardIndex);
           log(forwardIndex);
           if (forwardIndex < slidesNumber) {
-            transitionOn();
             return $slideUl.css("margin-left", -(forwardIndex * frameWidth));
           } else {
             $("li:first-child", $slideUl).clone().insertAfter($("li:last", $slideUl));
@@ -107,12 +107,12 @@
           }
         };
         moveBackward = function() {
+          transitionOn();
           checkTheAction();
           forwardIndex--;
           theDottedConnection(forwardIndex);
           log(forwardIndex);
           if (forwardIndex >= 0) {
-            transitionOn();
             return $slideUl.css("margin-left", -(forwardIndex * frameWidth));
           } else {
             forwardIndex = slidesNumber - 1;
@@ -147,22 +147,19 @@
             return moveBackward();
           }
         });
-        if (jQuery.browser.mobile) {
-          $slides.swipe({
-            swipeRight: function() {
-              if (preventTheAction()) {
-                return moveForward();
-              }
-            },
-            swipeLeft: function() {
-              if (preventTheAction()) {
-                return moveBackward();
-              }
-            }
-          });
-        }
+        $slides.on("swipeleft", function() {
+          if (preventTheAction()) {
+            return moveForward();
+          }
+        }).on("swiperight", function() {
+          if (preventTheAction()) {
+            return moveBackward();
+          }
+        });
         theAutoLoop = setInterval(function() {
-          moveForward();
+          if (preventTheAction()) {
+            moveForward();
+          }
         }, settings.loop_timing);
         return $(document).on({
           mouseenter: function() {
@@ -172,7 +169,9 @@
           mouseleave: function() {
             log("out");
             return theAutoLoop = setInterval(function() {
-              moveForward();
+              if (preventTheAction()) {
+                moveForward();
+              }
             }, settings.loop_timing);
           }
         }, ".container", $this);
