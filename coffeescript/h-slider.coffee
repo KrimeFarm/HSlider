@@ -87,9 +87,9 @@ $.fn.extend
       slideIndex = 0
       while (slideIndex < slidesNumber)
         if slideIndex is 0
-          $signature.append("<li class=\"signature-#{slideIndex} lightsOn\"></li>")
+          $signature.append("<li id=\"signature-#{slideIndex}\" class=\"lightsOn\"></li>")
         else
-          $signature.append("<li class=\"signature-#{slideIndex}\"></li>")
+          $signature.append("<li id=\"signature-#{slideIndex}\"></li>")
         slideIndex++
 
 
@@ -98,13 +98,13 @@ $.fn.extend
         log "this is the slide number #{elem}"
         $("li", $signature).removeClass("lightsOn")
         if elem is slidesNumber
-          $("li.signature-0", $this).addClass("lightsOn")
+          $("li#signature-0", $this).addClass("lightsOn")
           log "this is max"
         else if elem < 0
           log "this is min"
-          $("li.signature-#{slidesNumber - 1}", $this).addClass("lightsOn")
+          $("li#signature-#{slidesNumber - 1}", $this).addClass("lightsOn")
         else
-          $("li.signature-#{elem}", $this).addClass("lightsOn")
+          $("li#signature-#{elem}", $this).addClass("lightsOn")
 
 
       # Place a control class
@@ -189,14 +189,20 @@ $.fn.extend
 
 
 
-      # the slide interaction
-      $slides
-        .on "swipeleft", ->
-          if preventTheAction()
-            moveForward()
-        .on "swiperight", ->
-          if preventTheAction()
-            moveBackward()
+      # the click on dotted things
+      # interaction, which means
+      # every dot is linked to a
+      # slide and will slide to the
+      # correct position
+
+      $("li", $signature). on "click", ->
+        transitionOn()
+        checkTheAction()
+        theSigId = $(this).attr "id"
+        theSigSliced = theSigId.slice(-1)
+        forwardIndex = theSigSliced
+        theDottedConnection(forwardIndex)
+        $slideUl.css "margin-left", - (forwardIndex * frameWidth)
 
 
       # auto loop start, to run

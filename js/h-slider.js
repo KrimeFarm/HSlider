@@ -60,9 +60,9 @@
         slideIndex = 0;
         while (slideIndex < slidesNumber) {
           if (slideIndex === 0) {
-            $signature.append("<li class=\"signature-" + slideIndex + " lightsOn\"></li>");
+            $signature.append("<li id=\"signature-" + slideIndex + "\" class=\"lightsOn\"></li>");
           } else {
-            $signature.append("<li class=\"signature-" + slideIndex + "\"></li>");
+            $signature.append("<li id=\"signature-" + slideIndex + "\"></li>");
           }
           slideIndex++;
         }
@@ -70,13 +70,13 @@
           log("this is the slide number " + elem);
           $("li", $signature).removeClass("lightsOn");
           if (elem === slidesNumber) {
-            $("li.signature-0", $this).addClass("lightsOn");
+            $("li#signature-0", $this).addClass("lightsOn");
             return log("this is max");
           } else if (elem < 0) {
             log("this is min");
-            return $("li.signature-" + (slidesNumber - 1), $this).addClass("lightsOn");
+            return $("li#signature-" + (slidesNumber - 1), $this).addClass("lightsOn");
           } else {
-            return $("li.signature-" + elem, $this).addClass("lightsOn");
+            return $("li#signature-" + elem, $this).addClass("lightsOn");
           }
         };
         checkTheAction = function() {
@@ -147,14 +147,15 @@
             return moveBackward();
           }
         });
-        $slides.on("swipeleft", function() {
-          if (preventTheAction()) {
-            return moveForward();
-          }
-        }).on("swiperight", function() {
-          if (preventTheAction()) {
-            return moveBackward();
-          }
+        $("li", $signature).on("click", function() {
+          var theSigId, theSigSliced;
+          transitionOn();
+          checkTheAction();
+          theSigId = $(this).attr("id");
+          theSigSliced = theSigId.slice(-1);
+          forwardIndex = theSigSliced;
+          theDottedConnection(forwardIndex);
+          return $slideUl.css("margin-left", -(forwardIndex * frameWidth));
         });
         theAutoLoop = setInterval(function() {
           if (preventTheAction()) {

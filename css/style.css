@@ -31,6 +31,7 @@
   height: 200px;
   width: 30px;
   background-color: gray;
+  cursor: pointer;
 }
 .content .container .before {
   left: 0;
@@ -48,6 +49,7 @@
   width: 10px;
   border-radius: 10px;
   margin: 0 10px;
+  cursor: pointer;
 }
 .content .signature li.lightsOn {
   background: blue;
