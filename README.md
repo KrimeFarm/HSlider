@@ -6,6 +6,7 @@ An horizontal slider, responsive and compatible with Bootstrap, animations with 
 ### Requires:
 - [jquery.event.move](http://stephband.info/jquery.event.move/)
 - [jquery.event.swipe](http://stephband.info/jquery.event.swipe/)
+- [velocity](https://github.com/julianshapiro/velocity)
 
 ### They can be installed with [Bower](http://bower.io/)
 `bower install jquery.event.move`
@@ -77,4 +78,5 @@ $ ->
       slide_timing: 1
       loop_timing: 5000
       slide_effect: "cubic-bezier(1,.34,.83,.9)"
+      velocity_is_on: true
 ```
