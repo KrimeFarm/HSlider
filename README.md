@@ -11,6 +11,7 @@ An horizontal slider, responsive and compatible with Bootstrap, animations with 
 ### They can be installed with [Bower](http://bower.io/)
 `bower install jquery.event.move`
 `bower install jquery.event.swipe`
+`bower install velocity`
 
 ## Html side
 
