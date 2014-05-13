@@ -49,6 +49,11 @@ $.fn.extend
           "transition":        "none"
         return
 
+      # prevent the vertical
+      # swipe with event jquery.event.swipe
+      $this.on "movestart", (e) ->
+        e.preventDefault()  if (e.distX > e.distY and e.distX < -e.distY) or (e.distX < e.distY and e.distX > -e.distY)
+        return
 
       # get the container width and
       # the number of the slides
@@ -187,6 +192,14 @@ $.fn.extend
         if preventTheAction()
           moveBackward()
 
+
+      $container
+        .on "swipeleft",   (e) ->
+          if preventTheAction()
+            moveForward()
+        .on "swiperight", (e) ->
+          if preventTheAction()
+            moveBackward()
 
 
       # the click on dotted things
