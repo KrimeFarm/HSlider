@@ -10,7 +10,8 @@
         debug: false,
         slide_timing: 1,
         loop_timing: 5000,
-        slide_effect: "cubic-bezier(1,.34,.83,.9)"
+        slide_effect: "cubic-bezier(1,.34,.83,.9)",
+        velocity_is_on: true
       };
       settings = $.extend(settings, options);
       log = function(msg) {
@@ -27,22 +28,26 @@
         $interactions = $(".next, .before", $this);
         $signature = $("ul.signature", $this);
         transitionOn = function() {
-          $slideUl.css({
-            "webkit-transition": "all " + settings.slide_timing + "s " + settings.slide_effect,
-            "moz-transition": "all " + settings.slide_timing + "s " + settings.slide_effect,
-            "ms-transition": "all " + settings.slide_timing + "s " + settings.slide_effect,
-            "o-transition": "all " + settings.slide_timing + "s " + settings.slide_effect,
-            "transition": "all " + settings.slide_timing + "s " + settings.slide_effect
-          });
+          if (!settings.velocity_is_on) {
+            $slideUl.css({
+              "webkit-transition": "all " + settings.slide_timing + "s " + settings.slide_effect,
+              "moz-transition": "all " + settings.slide_timing + "s " + settings.slide_effect,
+              "ms-transition": "all " + settings.slide_timing + "s " + settings.slide_effect,
+              "o-transition": "all " + settings.slide_timing + "s " + settings.slide_effect,
+              "transition": "all " + settings.slide_timing + "s " + settings.slide_effect
+            });
+          }
         };
         transitionOff = function() {
-          $slideUl.css({
-            "webkit-transition": "none",
-            "moz-transition": "none",
-            "ms-transition": "none",
-            "o-transition": "none",
-            "transition": "none"
-          });
+          if (!settings.velocity_is_on) {
+            $slideUl.css({
+              "webkit-transition": "none",
+              "moz-transition": "none",
+              "ms-transition": "none",
+              "o-transition": "none",
+              "transition": "none"
+            });
+          }
         };
         $this.on("movestart", function(e) {
           if ((e.distX > e.distY && e.distX < -e.distY) || (e.distX < e.distY && e.distX > -e.distY)) {
@@ -99,10 +104,28 @@
           theDottedConnection(forwardIndex);
           log(forwardIndex);
           if (forwardIndex < slidesNumber) {
-            return $slideUl.css("margin-left", -(forwardIndex * frameWidth));
+            if (settings.velocity_is_on) {
+              return $slideUl.velocity({
+                "margin-left": -(forwardIndex * frameWidth)
+              }, {
+                duration: settings.slide_timing * 1000,
+                easing: settings.slide_effect
+              });
+            } else {
+              return $slideUl.css("margin-left", -(forwardIndex * frameWidth));
+            }
           } else {
             $("li:first-child", $slideUl).clone().insertAfter($("li:last", $slideUl));
-            $slideUl.css("margin-left", -(forwardIndex * frameWidth));
+            if (settings.velocity_is_on) {
+              $slideUl.velocity({
+                "margin-left": -(forwardIndex * frameWidth)
+              }, {
+                duration: settings.slide_timing * 1000,
+                easing: settings.slide_effect
+              });
+            } else {
+              $slideUl.css("margin-left", -(forwardIndex * frameWidth));
+            }
             setTimeout(function() {
               transitionOff();
               $slideUl.css("margin-left", 0);
@@ -118,7 +141,16 @@
           theDottedConnection(forwardIndex);
           log(forwardIndex);
           if (forwardIndex >= 0) {
-            return $slideUl.css("margin-left", -(forwardIndex * frameWidth));
+            if (settings.velocity_is_on) {
+              return $slideUl.velocity({
+                "margin-left": -(forwardIndex * frameWidth)
+              }, {
+                duration: settings.slide_timing * 1000,
+                easing: settings.slide_effect
+              });
+            } else {
+              return $slideUl.css("margin-left", -(forwardIndex * frameWidth));
+            }
           } else {
             forwardIndex = slidesNumber - 1;
             $("li:last-child", $slideUl).clone().insertBefore($("li:first-child", $slideUl));
@@ -169,7 +201,13 @@
           theSigSliced = theSigId.slice(-1);
           forwardIndex = theSigSliced;
           theDottedConnection(forwardIndex);
-          return $slideUl.css("margin-left", -(forwardIndex * frameWidth));
+          if (settings.velocity_is_on) {
+            return $slideUl.velocity({
+              "margin-left": -(forwardIndex * frameWidth)
+            });
+          } else {
+            return $slideUl.css("margin-left", -(forwardIndex * frameWidth));
+          }
         });
         theAutoLoop = setInterval(function() {
           if (preventTheAction()) {

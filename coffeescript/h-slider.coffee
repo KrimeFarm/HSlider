@@ -11,6 +11,7 @@ $.fn.extend
       slide_timing: 1
       loop_timing: 5000
       slide_effect: "cubic-bezier(1,.34,.83,.9)"
+      velocity_is_on: true
 
     # Merge default settings with options.
     settings = $.extend settings, options
@@ -30,24 +31,28 @@ $.fn.extend
       $signature = $("ul.signature", $this)
 
       # css3 transitions
-      # on - off
+      # on - off only if
+      # velocity.js is not
+      # enabled
       transitionOn = ->
-        $slideUl.css
-          "webkit-transition": "all #{settings.slide_timing}s #{settings.slide_effect}"
-          "moz-transition":    "all #{settings.slide_timing}s #{settings.slide_effect}"
-          "ms-transition":     "all #{settings.slide_timing}s #{settings.slide_effect}"
-          "o-transition":      "all #{settings.slide_timing}s #{settings.slide_effect}"
-          "transition":        "all #{settings.slide_timing}s #{settings.slide_effect}"
+        if !settings.velocity_is_on
+          $slideUl.css
+            "webkit-transition": "all #{settings.slide_timing}s #{settings.slide_effect}"
+            "moz-transition":    "all #{settings.slide_timing}s #{settings.slide_effect}"
+            "ms-transition":     "all #{settings.slide_timing}s #{settings.slide_effect}"
+            "o-transition":      "all #{settings.slide_timing}s #{settings.slide_effect}"
+            "transition":        "all #{settings.slide_timing}s #{settings.slide_effect}"
         return
 
       transitionOff = ->
-        $slideUl.css
-          "webkit-transition": "none"
-          "moz-transition":    "none"
-          "ms-transition":     "none"
-          "o-transition":      "none"
-          "transition":        "none"
-        return
+        if !settings.velocity_is_on
+          $slideUl.css
+            "webkit-transition": "none"
+            "moz-transition":    "none"
+            "ms-transition":     "none"
+            "o-transition":      "none"
+            "transition":        "none"
+          return
 
       # prevent the vertical
       # swipe with event jquery.event.swipe
@@ -79,11 +84,6 @@ $.fn.extend
         $slideUl.css "margin-left", - (forwardIndex * frameWidth)
         transitionOff()
 
-
-      # control class for dotted things
-      # on the bottom
-      # $slides.each (ind)->
-      #   $(this).addClass "slide-#{ind}"
 
 
       # Generate the exact number of the
@@ -135,10 +135,32 @@ $.fn.extend
         theDottedConnection(forwardIndex)
         log forwardIndex
         if forwardIndex < slidesNumber
-          $slideUl.css "margin-left", - (forwardIndex * frameWidth)
+
+          # check if velocity is enabled
+          # than start the animation accordingly
+          if settings.velocity_is_on
+            $slideUl.velocity
+              "margin-left": - (forwardIndex * frameWidth)
+            ,
+            duration: settings.slide_timing * 1000
+            easing: settings.slide_effect
+          else
+            $slideUl.css "margin-left", - (forwardIndex * frameWidth)
+
         else
           $("li:first-child", $slideUl).clone().insertAfter($("li:last", $slideUl))
-          $slideUl.css "margin-left", - (forwardIndex * frameWidth)
+
+          # check if velocity is enabled
+          # than start the animation accordingly
+          if settings.velocity_is_on
+            $slideUl.velocity
+              "margin-left": - (forwardIndex * frameWidth)
+            ,
+            duration: settings.slide_timing * 1000
+            easing: settings.slide_effect
+          else
+            $slideUl.css "margin-left", - (forwardIndex * frameWidth)
+
           setTimeout ->
             transitionOff()
             $slideUl.css "margin-left", 0
@@ -154,7 +176,18 @@ $.fn.extend
         theDottedConnection(forwardIndex)
         log forwardIndex
         if  forwardIndex >= 0
-          $slideUl.css "margin-left", - (forwardIndex * frameWidth)
+
+          # check if velocity is enabled
+          # than start the animation accordingly
+          if settings.velocity_is_on
+            $slideUl.velocity
+              "margin-left": - (forwardIndex * frameWidth)
+            ,
+            duration: settings.slide_timing * 1000
+            easing: settings.slide_effect
+          else
+            $slideUl.css "margin-left", - (forwardIndex * frameWidth)
+
         else
           forwardIndex = slidesNumber - 1
           $("li:last-child", $slideUl).clone().insertBefore($("li:first-child", $slideUl))
@@ -215,7 +248,14 @@ $.fn.extend
         theSigSliced = theSigId.slice(-1)
         forwardIndex = theSigSliced
         theDottedConnection(forwardIndex)
-        $slideUl.css "margin-left", - (forwardIndex * frameWidth)
+
+        # check if velocity is enabled
+        # than start the animation accordingly
+        if settings.velocity_is_on
+          $slideUl.velocity
+            "margin-left": - (forwardIndex * frameWidth)
+        else
+          $slideUl.css "margin-left", - (forwardIndex * frameWidth)
 
 
       # auto loop start, to run
