@@ -38,30 +38,52 @@
 }
 
 .content {
-  margin: 0 auto;
+  margin: 100px auto;
   min-height: 200px;
 
   .container {
     position: relative;
     height: 200px;
     overflow: hidden;
-    border: 1px solid blue;
+    border: 1px solid #31637e;
 
     .next,.before {
       position: absolute;
       right: 0;
       top: 0;
       height: 200px;
-      width: 30px;
-      background-color: gray;
+      width: 50px;
+
+      background-color: #31637e;
+
+      font-size: 40px;
+      font-weight: 900;
+      color: #62c6fb;
+
       cursor: pointer;
-    }
-
-    .before {
-      left: 0;
-    }
-
   }
+
+  .next span {
+    display: block;
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    margin-top: -30px;
+  }
+
+  .before span {
+    display: block;
+    position: absolute;
+    top: 50%;
+    left: 10px;
+    margin-top: -30px;
+    }
+
+  .before {
+    left: 0;
+  }
+
+}
 }
 
 
@@ -72,23 +94,23 @@
 // =G============================
 
 .content .signature {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  text-align: center;
-  li {
-    display: inline-block;
-    background: magenta;
-    height: 10px;
-    width: 10px;
-    border-radius: 10px;
-    margin: 0 10px;
-    cursor: pointer;
+list-style: none;
+padding: 0;
+margin: 0;
+text-align: center;
+li {
+  display: inline-block;
+  background: #66ccff;
+  height: 10px;
+  width: 10px;
+  border-radius: 10px;
+  margin: 0 10px;
+  cursor: pointer;
 
-    &.lightsOn {
-      background: blue;
-    }
+  &.lightsOn {
+    background: #31637e;
   }
+}
 }
 
 
@@ -98,8 +120,8 @@
 // =G==========
 
 .slide {
-  list-style: none;
-  padding: 0;
+list-style: none;
+padding: 0;
   margin: 0;
   li {
     float: left;
