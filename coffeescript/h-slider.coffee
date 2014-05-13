@@ -195,7 +195,14 @@ $.fn.extend
           $slideUl.css "margin-left", - frameWidth
           setTimeout ->
             transitionOn()
-            $slideUl.css "margin-left", 0
+            if settings.velocity_is_on
+              $slideUl.velocity
+                "margin-left": 0
+              ,
+              duration: settings.slide_timing * 1000
+              easing: settings.slide_effect
+            else
+              $slideUl.css "margin-left", 0
             setTimeout ->
               transitionOff()
               $slideUl.css "margin-left", - ( (slidesNumber - 1) * frameWidth )
